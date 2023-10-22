@@ -2,9 +2,155 @@
 
 # Passo a passo para processamento simplificado de dados com Power BI na Azure com MySQL
 
-#1. Criaçao de uma instancia na Azure para MySQL
-#2. Criaçao do banco de dados
-#3. Integraçao do PowerBi com MySQL no Azure
-#4. Verificar problemas na base afim de realizar a transformaçao dos dados
+1. Criaçao de uma instancia na Azure para MySQL
+2. Criaçao do banco de dados
+3. Integraçao do PowerBi com MySQL no Azure
+4. Verificar problemas na base afim de realizar a transformaçao dos dados
 
-# 💡 
+
+## Passo 1: Criação de uma Instância na Azure para MySQL
+
+    1.1. Faça login na sua conta da Microsoft Azure.
+    1.2. No painel da Azure, clique em "Criar um recurso" no canto superior esquerdo.
+    1.3. No campo de pesquisa, digite "Azure Database for MySQL" e selecione a opção correspondente.
+    1.4. Preencha as informações necessárias.
+         (Nome do servidor MySQL, credenciais do administrador, região, o nível de desempenho, etc.)
+    1.5. Siga as etapas do assistente para criar a instância do MySQL na Azure.
+
+## Passo 2: Criação do Banco de Dados
+
+    2.1. Após criar a instância do MySQL, conecte-se ao servidor usando um cliente MySQL ou ferramenta como o MySQL Workbench.
+
+## Passo 3: Integração do Power BI com MySQL na Azure
+
+    3.1. Abra o Power BI Desktop, caso já não o tenha instalado. Você pode baixá-lo no site da Microsoft.
+    3.2. No Power BI Desktop, clique em "Obter Dados" na guia "Página Inicial".
+    3.3. Escolha "Base de Dados MySQL" nas fontes de dados disponíveis.
+    3.4. Na janela de conexão, preencha as informações de conexão com o servidor MySQL na Azure.
+         (Endereço do servidor, nome do banco de dados, e as credenciais de login.)
+    3.5. Clique em "OK" para estabelecer a conexão com o banco de dados.
+    3.6. Você verá a lista de tabelas disponíveis no banco de dados. 
+         Selecione as tabelas que deseja importar para o Power BI e clique em "Carregar".
+
+## Passo 4: Verificar Problemas na Base para Realizar a Transformação dos Dados
+
+    4.1. Após carregar os dados, você pode usar o Power BI para verificar e transformar os dados conforme necessário.
+    4.2. No Power BI, acesse a guia "Editor de Consultas" para aplicar transformações aos dados.
+    4.3. Use as ferramentas de limpeza e transformação do Power BI para tratar quaisquer problemas nos dados.
+    4.4. Crie relações entre as tabelas, se necessário, para combinar dados de diferentes tabelas.
+    4.5. Realize operações de modelagem e agregação de dados conforme as necessidades do seu relatório ou painel.
+    4.6. Salve o seu projeto do Power BI com as transformações realizadas.
+    4.7. Crie relatórios e painéis interativos com os dados transformados.
+    4.8. Atualize os dados conforme necessário para manter o seu relatório atualizado.
+
+Esse tutorial abrange os passos básicos para processar e transformar dados com o Power BI na Azure usando um banco de dados MySQL.
+
+
+
+    </> Colocando a mão na massa
+
+
+# 💻 Creating the Database:
+
+-- Create the database
+CREATE DATABASE YourDatabaseName;
+USE YourDatabaseName;
+
+-- Create the Gerente table
+CREATE TABLE Gerente (
+    GerenteID INT AUTO_INCREMENT PRIMARY KEY,
+    Name VARCHAR(255) NOT NULL
+);
+
+-- Insert data into the Gerente table
+INSERT INTO Gerente (Name) VALUES
+('John Smith'),
+('Franklin Wong');
+
+-- Create the Colaborador table
+CREATE TABLE Colaborador (
+    ColaboradorID INT AUTO_INCREMENT PRIMARY KEY,
+    Name VARCHAR(255) NOT NULL,
+    GerenteID INT,
+    FOREIGN KEY (GerenteID) REFERENCES Gerente(GerenteID)
+);
+
+-- Insert data into the Colaborador table
+INSERT INTO Colaborador (Name, GerenteID) VALUES
+('Amanda Teixeira', 1),
+('Joyce English', 2),
+('Ramesh Narayan', 2),
+('James Borg', 2),
+('Jennifer Wallace', 1),
+('Ahmad Jabbar', 1),
+('Alicia Zelaya', 2);
+
+-- Create the Store table
+CREATE TABLE Store (
+    StoreID INT AUTO_INCREMENT PRIMARY KEY,
+    Name VARCHAR(255) NOT NULL,
+    Dnumber INT NOT NULL,
+    Mgr_ssn INT NOT NULL
+);
+
+-- Insert data into the Store table
+INSERT INTO Store (Name, Dnumber, Mgr_ssn) VALUES
+('Houston Headquarters', 1, 88866555),
+('Stafford Administration', 4, 987654321),
+('Bellaire Research', 5, 333445555),
+('Houston Research', 5, 333445555),
+('Sugarland Research', 5, 333445555);
+
+📄  Vamos abordar cada uma das diretrizes de transformação de dados abaixo e explicar como realizá-las:
+
+  ## Verifique os cabeçalhos e tipos de dados:
+Use a funcionalidade do Power BI ou uma consulta SQL para verificar os cabeçalhos das tabelas e os tipos de dados em cada coluna. 
+Isso ajuda a garantir que os dados estejam corretamente formatados.
+
+
+  ## Modifique os valores monetários para o tipo double preciso:
+No Power BI, você pode selecionar a coluna que contém os valores monetários e alterar o tipo de dados para "Número Decimal".
+
+  ## Verifique a existência dos nulos e analise a remoção:
+Utilize o Power BI para verificar e tratar valores nulos nas colunas. 
+Você pode remover as linhas com valores nulos ou preencher os nulos, dependendo da situação.
+
+  ## Os employees com nulos em Super_ssn podem ser os gerentes. Verifique se há algum colaborador sem gerente:
+No Power BI, crie uma consulta que filtra os colaboradores com valores nulos em Super_ssn. 
+Se não houver colaboradores sem gerente, isso significa que todos os colaboradores têm gerentes.
+
+  ## Verifique se há algum departamento sem gerente:
+No Power BI, crie uma consulta que identifica os departamentos sem gerente. 
+Isso pode ser feito através de uma consulta de mesclagem de tabelas que relaciona os departamentos com os gerentes.
+
+  ## Se houver departamento sem gerente, suponha que você possui os dados e preencha as lacunas:
+Se você identificar departamentos sem gerentes, pode preencher essas lacunas manualmente nos dados;
+Ou utilizar técnicas de preenchimento automático, dependendo do volume de dados.
+
+  ## Verifique o número de horas dos projetos:
+Use consultas no Power BI para calcular e verificar o número total de horas dos projetos com base nos dados da tabela de projetos.
+
+  ## Separar colunas complexas:
+Use a funcionalidade de "Dividir Colunas" no Power BI para dividir colunas complexas em partes menores, se necessário.
+
+  ## Mesclar consultas employee e department para criar uma tabela employee com o nome dos departamentos associados aos colaboradores:
+No Power BI, crie uma consulta que mescla as tabelas de colaboradores e departamentos com base na chave de junção (por exemplo, Dnumber). 
+Use a operação de "Junção Interna" para criar uma nova tabela que associe os nomes dos departamentos aos colaboradores.
+
+  ## Mescle as colunas de Nome e Sobrenome para ter apenas uma coluna definindo os nomes dos colaboradores:
+No Power BI, você pode criar uma coluna calculada que combina as colunas de nome e sobrenome em uma única coluna. 
+Isso pode ser feito usando a fórmula Nome & " " & Sobrenome.
+
+  ## Mescle os nomes de departamentos e localização. Isso fará com que cada combinação departamento-local seja única. 
+Isso ajudará na criação do modelo estrela em um módulo futuro:
+Crie uma coluna calculada no Power BI q/ combine os nomes de departamentos e localizações p/ criar uma única chave única p/ cada combinação. 
+Por exemplo, Departamento & " - " & Localização.
+
+  ## Por que, neste caso supracitado, podemos apenas utilizar o mesclar e não o atribuir:
+No contexto de criação de um modelo de dados no Power BI, a "mesclagem" se refere à combinação de tabelas com base em uma coluna comum,
+enquanto "atribuição" refere-se a criar relacionamentos explícitos entre tabelas. Em muitos casos, como o mencionado,
+a mesclagem é suficiente, pois ela cria uma associação entre tabelas sem a necessidade de relacionamentos explícitos. 
+O Power BI é capaz de entender e utilizar as mesclagens para gerar visualizações e relatórios apropriados. 
+A atribuição de relacionamentos é necessária quando as mesclagens não são suficientes para representar a estrutura dos dados, 
+como em esquemas de estrela ou esquemas de neve, mas no exemplo fornecido, a mesclagem é adequada. 
+Atribuir relacionamentos pode ser útil para criar modelos de dados mais complexos em situações diferentes.
